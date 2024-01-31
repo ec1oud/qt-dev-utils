@@ -41,6 +41,9 @@ func describe (bugID string, indent string) {
 			if link.InwardIssue != nil {
 				fmt.Printf("%s\t%s %s %s\n", indent, link.Type.Name, link.InwardIssue.Key, bugDesc(link.InwardIssue))
 			}
+			if link.OutwardIssue != nil {
+				fmt.Printf("%s\t%s %s %s\n", indent, link.Type.Name, link.OutwardIssue.Key, bugDesc(link.OutwardIssue))
+			}
 		}
 	}
 }
@@ -58,6 +61,9 @@ func describeWithID (bugID string, indent string) {
 		for _, link := range issue.Fields.IssueLinks {
 			if link.InwardIssue != nil {
 				fmt.Printf("%s\t%s %s %s\n", indent, link.Type.Name, link.InwardIssue.Key, bugDesc(link.InwardIssue))
+			}
+			if link.OutwardIssue != nil {
+				fmt.Printf("%s\t%s %s %s\n", indent, link.Type.Name, link.OutwardIssue.Key, bugDesc(link.OutwardIssue))
 			}
 		}
 	}
