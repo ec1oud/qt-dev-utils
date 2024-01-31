@@ -22,7 +22,7 @@ func bugDesc (bugID string) string {
 
 	priority, _, _ := strings.Cut(issue.Fields.Priority.Name, ":")
 
-	return fmt.Sprintf("%s %s %s: %+v", issue.Key, issue.Fields.Status.Name, priority, issue.Fields.Summary)
+	return fmt.Sprintf("%s %s: %+v", issue.Fields.Status.Name, priority, issue.Fields.Summary)
 }
 
 func main() {
@@ -30,9 +30,17 @@ func main() {
 	if len(os.Args) < 2 {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
+			fmt.Print(scanner.Text())
 			matches := re.FindAllString(scanner.Text(), -1)
-			for _, bugID := range matches {
-				fmt.Printf("%s\n", bugDesc(bugID))
+			if (len(matches) > 1) {
+				fmt.Println()
+				for _, bugID := range matches {
+					fmt.Printf("\t%s %s\n", bugID, bugDesc(bugID))
+				}
+			} else if (len(matches) == 1) {
+				fmt.Printf(" %s\n", bugDesc(matches[0]))
+			} else {
+				fmt.Println()
 			}
 		}
 	} else {
