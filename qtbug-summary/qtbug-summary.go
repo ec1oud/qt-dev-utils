@@ -21,8 +21,14 @@ func bugDesc (bugID string) string {
 	}
 
 	priority, _, _ := strings.Cut(issue.Fields.Priority.Name, ":")
+	resolution := "Unrslvd"
+	if issue.Fields.Resolution != nil {
+		resolution = issue.Fields.Resolution.Name
+	}
 
-	return fmt.Sprintf("%s %s: %+v", issue.Fields.Status.Name, priority, issue.Fields.Summary)
+	return fmt.Sprintf("%s %s %s\t%+v",
+		issue.Fields.Status.Name, resolution,
+		priority, issue.Fields.Summary)
 }
 
 func main() {
