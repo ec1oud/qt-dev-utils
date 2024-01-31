@@ -33,7 +33,6 @@ func describe (bugID string, indent string) {
 	if (err != nil) {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", bugID, err)
 		return
-		//~ panic(bugID, err) // todo output to stderr and return
 	}
 
 	fmt.Printf("%s%s\n", indent, bugDesc(issue))
@@ -50,13 +49,16 @@ func describeWithID (bugID string, indent string) {
 	issue, _, err := jiraClient.Issue.Get(bugID, nil)
 
 	if (err != nil) {
-		panic(err) // todo output to stderr and return
+		fmt.Fprintf(os.Stderr, "%s: %s\n", bugID, err)
+		return
 	}
 
 	fmt.Printf("%s%s %s\n", indent, bugID, bugDesc(issue))
 	if (relatedBugsFlag) {
 		for _, link := range issue.Fields.IssueLinks {
-			fmt.Printf("%s\t%s %s %s\n", indent, link.Type.Name, link.InwardIssue.Key, bugDesc(link.InwardIssue))
+			if link.InwardIssue != nil {
+				fmt.Printf("%s\t%s %s %s\n", indent, link.Type.Name, link.InwardIssue.Key, bugDesc(link.InwardIssue))
+			}
 		}
 	}
 }
