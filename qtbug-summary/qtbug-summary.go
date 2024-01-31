@@ -31,5 +31,5 @@ func main() {
 
 	priority, _, _ := strings.Cut(issue.Fields.Priority.Name, ":")
 
-	fmt.Printf("%s: %s: %+v\n", issue.Key, priority, issue.Fields.Summary)
+	fmt.Printf("%s %s %s: %+v\n", issue.Key, issue.Fields.Status.Name, priority, issue.Fields.Summary)
 }
