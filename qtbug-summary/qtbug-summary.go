@@ -14,6 +14,7 @@ import (
 
 var jiraClient, _ = jira.NewClient(nil, "https://bugreports.qt.io/")
 var relatedBugsFlag bool = false
+var fixesFlag bool = false
 
 func bugDesc (issue *jira.Issue) string {
 	priority, _, _ := strings.Cut(issue.Fields.Priority.Name, ":")
@@ -46,6 +47,12 @@ func describe (bugID string, indent string) {
 			}
 		}
 	}
+	if (fixesFlag) {
+		val, ok := issue.Fields.Unknowns["customfield_10142"]
+		if ok {
+			fmt.Printf("%s\tFixes: %s\n", indent, val)
+		}
+	}
 }
 
 func describeWithID (bugID string, indent string) {
@@ -67,10 +74,17 @@ func describeWithID (bugID string, indent string) {
 			}
 		}
 	}
+	if (fixesFlag) {
+		val, ok := issue.Fields.Unknowns["customfield_10142"]
+		if ok {
+			fmt.Printf("%s\tFixes: %s\n", indent, val)
+		}
+	}
 }
 
 func main() {
 	flag.BoolVar(&relatedBugsFlag, "r", false, "show related bugs")
+	flag.BoolVar(&fixesFlag, "f", false, "show fixes (patches)")
 	flag.Parse()
 
 	re := regexp.MustCompile("QTBUG-[0-9]+")
